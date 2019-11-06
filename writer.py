@@ -4,7 +4,8 @@ from utils import switcher_channel, switcher_item, checkStrings
 
 def writeXML(products):
     rss = ET.Element('rss')
-    rss.set('xmlns:g', "http://base.google.com/ns/1.0")
+    rss.set('version', '2.0')
+    rss.set('xmlns:g', 'http://base.google.com/ns/1.0')
     channel = ET.SubElement(rss, 'channel')
     for attribute in switcher_channel:
         item = ET.SubElement(channel, attribute)
