@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
 from settings import XML_FEED_FILENAME, XML_SITE_NAME, XML_SITE_HOST, XML_FEED_DESCRIPTION
-from utils import switcher_channel, switcher_item, checkForGoogleRules
+from utils import switcher_channel, switcher_item, checkStrings
 
 def writeXML(products):
     rss = ET.Element('rss')
@@ -24,6 +24,9 @@ def getSwitcherAttribute(switcher, item, product):
         else:
             product_attribute = ET.SubElement(item, attribute)
             if hasattr(product, switcher[attribute]):
-                product_attribute.text = checkForGoogleRules(str(product.__getattribute__(switcher[attribute])), attribute)
+                if str(getattr(product, switcher[attribute])):
+                    product_attribute.text = str(checkStrings(getattr(product, switcher[attribute]), attribute))
+                else:
+                    item.remove(product_attribute)
             else:
                 product_attribute.text = switcher[attribute]

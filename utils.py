@@ -1,4 +1,5 @@
 import settings
+import pywoo
 
 switcher_channel = {
     'title': settings.XML_SITE_NAME,
@@ -11,7 +12,7 @@ switcher_item = {
     'g:title' : 'name',
     'g:description' : 'description',
     'g:link' : 'permalink',
-    'g:image_link' : '',
+    'g:image_link' : 'images',
     'g:availability' : 'stock_status',
     'g:price' : 'price',
     'g:condition': 'New',
@@ -23,7 +24,10 @@ switcher_item = {
 def addStaticDict(dict_key, static_dict):
     switcher_item[dict_key].append(static_dict)
 
-def checkForGoogleRules(text, attribute):
+def checkStrings(text, attribute):
     if(attribute == 'g:price'):
-        return 'EUR ' + text
+        return text + ' EUR'
+    else:
+        if isinstance(text, list) and text and isinstance(text[0], pywoo.models.products.ProductImage):
+            return text[0].src
     return text

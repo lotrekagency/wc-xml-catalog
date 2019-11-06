@@ -19,7 +19,7 @@ for zone in shipping_zones:
             shipping_dict = {
                 'g:country' : location.code,
                 'g:service' : method.method_title,
-                'g:price' : 'EUR ' + method_price
+                'g:price' : method_price + ' EUR'
             }
             addStaticDict('g:shipping', shipping_dict)
 writeXML(products)
