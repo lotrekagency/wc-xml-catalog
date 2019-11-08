@@ -1,33 +1,51 @@
 import xml.etree.ElementTree as ET
 from settings import XML_FEED_FILENAME, XML_SITE_NAME, XML_SITE_HOST, XML_FEED_DESCRIPTION
-from utils import switcher_channel, switcher_item, checkStrings
+from utils import switcher_channel, switcher_item, split_path, get_index
 
-def writeXML(products):
+def write_xml(products, language):
     rss = ET.Element('rss')
     rss.set('version', '2.0')
     rss.set('xmlns:g', 'http://base.google.com/ns/1.0')
     channel = ET.SubElement(rss, 'channel')
+
     for attribute in switcher_channel:
         item = ET.SubElement(channel, attribute)
         item.text = switcher_channel[attribute]
     for product in products:
         item = ET.SubElement(channel, 'item')
-        getSwitcherAttribute(switcher_item, item, product)
+        get_switcher_attribute(switcher_item, item, product)
     root = ET.ElementTree(rss)
-    root.write('feeds/{0}.xml'.format(XML_FEED_FILENAME))
+    root.write('feeds/{0}_{1}.xml'.format(XML_FEED_FILENAME, language))
+    print(("\033[95m[Feed XML] '{0}_{1}.xml' generated.\033[0m").format(XML_FEED_FILENAME, language))
 
-def getSwitcherAttribute(switcher, item, product):
+def get_switcher_attribute(switcher, item, product):
     for attribute in switcher:
-        if isinstance(switcher[attribute], list):
-            for nested_dict in switcher[attribute]:
+        if 'static' in switcher[attribute]:
+            value = switcher[attribute]['static']
+            write_xml_attribute(value, item, attribute, switcher[attribute], product)
+        if 'attribute' in switcher[attribute]:
+            value = switcher[attribute]['attribute']
+            if 'path' in switcher[attribute]:
+                for path_element in switcher[attribute]['path']:
+                    if hasattr(product, path_element):
+                        value = getattr(get_path(product, path_element), value)
+                write_xml_attribute(value, item, attribute, switcher[attribute], product)
+            if hasattr(product, value):
+                write_xml_attribute(str(getattr(product, value)), item, attribute, switcher[attribute], product)
+        if 'list' in switcher[attribute]:
+            for element in switcher[attribute]['list']:
                 product_attribute = ET.SubElement(item, attribute)
-                getSwitcherAttribute(nested_dict, product_attribute, product)
-        else:
-            product_attribute = ET.SubElement(item, attribute)
-            if hasattr(product, switcher[attribute]):
-                if str(getattr(product, switcher[attribute])):
-                    product_attribute.text = str(checkStrings(getattr(product, switcher[attribute]), attribute))
-                else:
-                    item.remove(product_attribute)
-            else:
-                product_attribute.text = switcher[attribute]
+                get_switcher_attribute(element, product_attribute, product)
+
+def write_xml_attribute(value, item, attribute, switcher, product):
+    if value:
+        product_attribute = ET.SubElement(item, attribute)
+        product_attribute.text = switcher.get('prefix', '') + value + switcher.get('suffix', '')
+    else:
+        print(("\033[91m[Feed XML] Error: '{0}' has empty value (product ID {1}).\033[0m").format(attribute, product.id))
+
+def get_path(current_location, path):
+    if hasattr(current_location, path):
+        return getattr(current_location, path) if get_index(path) else getattr(current_location, path)[get_index(path)]
+    else:
+        return current_location
