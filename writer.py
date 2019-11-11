@@ -16,7 +16,7 @@ def write_xml(products, language):
         get_switcher_attribute(switcher_item, item, product)
     root = ET.ElementTree(rss)
     root.write('feeds/{0}_{1}.xml'.format(XML_FEED_FILENAME, language))
-    print(("\033[95m[Feed XML] '{0}_{1}.xml' generated.\033[0m").format(XML_FEED_FILENAME, language))
+    print(("\033[95m\033[1m[Feed XML] '{0}_{1}.xml' generated.\033[0m").format(XML_FEED_FILENAME, language))
 
 def get_switcher_attribute(switcher, item, product):
     for attribute in switcher:
@@ -26,11 +26,9 @@ def get_switcher_attribute(switcher, item, product):
         if 'attribute' in switcher[attribute]:
             value = switcher[attribute]['attribute']
             if 'path' in switcher[attribute]:
-                for path_element in switcher[attribute]['path']:
-                    if hasattr(product, path_element):
-                        value = getattr(get_path(product, path_element), value)
+                value = getattr(get_path(product, switcher[attribute]['path']), value)
                 write_xml_attribute(value, item, attribute, switcher[attribute], product)
-            if hasattr(product, value):
+            elif hasattr(product, value):
                 write_xml_attribute(str(getattr(product, value)), item, attribute, switcher[attribute], product)
         if 'list' in switcher[attribute]:
             for element in switcher[attribute]['list']:
@@ -41,11 +39,11 @@ def write_xml_attribute(value, item, attribute, switcher, product):
     if value:
         product_attribute = ET.SubElement(item, attribute)
         product_attribute.text = switcher.get('prefix', '') + value + switcher.get('suffix', '')
-    else:
+    elif 'optional' in switcher and not switcher['optional']:
         print(("\033[91m[Feed XML] Error: '{0}' has empty value (product ID {1}).\033[0m").format(attribute, product.id))
 
 def get_path(current_location, path):
-    if hasattr(current_location, path):
-        return getattr(current_location, path) if get_index(path) else getattr(current_location, path)[get_index(path)]
-    else:
-        return current_location
+    attribute, index = get_index(path)
+    if index:
+        return getattr(current_location, attribute)[int(index)]
+    return attribute

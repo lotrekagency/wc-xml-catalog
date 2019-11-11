@@ -26,7 +26,7 @@ switcher_item = {
         'attribute' : 'permalink'
     },
     'g:image_link' : {
-        'path' : ['images[0]', 'image'],
+        'path' : 'images[0]',
         'attribute' : 'src'
     },
     'g:google_product_category' : {
@@ -49,10 +49,11 @@ switcher_item = {
         'list' : methods_list
     },
     'g:sale_price' : {
-        'attribute' : 'sale_price'
+        'attribute' : 'sale_price',
+        'optional' : True
     },
     'g:identifier_exists' : {
-        'attribute' : 'yes'
+        'static' : 'yes'
     }
 }
 
@@ -80,5 +81,8 @@ def split_path(path):
 
 def get_index(path):
     path_splitted = path.replace(']', '[').split('[')
-    return path_splitted[-2] if path_splitted is list else path
+    if isinstance(path_splitted, list):
+        return path_splitted[0], path_splitted[-2]
+    else:
+        return path_splitted, None
 

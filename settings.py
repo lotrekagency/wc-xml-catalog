@@ -32,4 +32,3 @@ XML_SITE_NAME = 'Cashmere Island'
 XML_SITE_HOST = 'cashmere.lotrek.net'
 XML_FEED_DESCRIPTION = 'Feed XML autogenerato.'
 XML_GOOGLE_PRODUCT_CATEGORY = '11686'
-
