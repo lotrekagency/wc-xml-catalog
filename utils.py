@@ -32,6 +32,10 @@ switcher_item = {
     'g:google_product_category' : {
         'static' : settings.XML_GOOGLE_PRODUCT_CATEGORY
     },
+    'g:item_group_id' : {
+        'attribute' : 'parent_id',
+        'logs' : False
+    },
     'g:availability' : {
         'attribute' : 'stock_status'
     },
@@ -50,7 +54,7 @@ switcher_item = {
     },
     'g:sale_price' : {
         'attribute' : 'sale_price',
-        'optional' : True
+        'logs' : False
     },
     'g:identifier_exists' : {
         'static' : 'yes'

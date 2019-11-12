@@ -21,6 +21,8 @@ for language in LANGUAGES:
         products_list.append(product)
         product_variations = api.get_product_variations(product_id=product.id, lang=language)
         for product_variation in product_variations:
-            products_list.append(api.get_products(id=product_variation.id))
+            obj = api.get_products(id=product_variation.id)
+            setattr(obj, 'parent_id', product.id)
+            products_list.append(obj)
     print(("\033[95m[Feed XML] Generating '{0}_{1}.xml'...\033[0m").format(XML_FEED_FILENAME, language))
     write_xml(products_list, language)
