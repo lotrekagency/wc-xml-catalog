@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as ET
+import os
 from settings import XML_FEED_FILENAME, XML_SITE_NAME, XML_SITE_HOST, XML_FEED_DESCRIPTION
 from utils import switcher_channel, switcher_item, split_path, get_index
 
@@ -17,6 +18,7 @@ def write_xml(products, language):
         item = ET.SubElement(channel, 'item')
         get_switcher_attribute(switcher_item, item, product)
     root = ET.ElementTree(rss)
+    os.makedirs('feeds', exist_ok=True)
     root.write('feeds/{0}_{1}.xml'.format(XML_FEED_FILENAME, language))
     print(("\033[95m\033[1m[Feed XML] '{0}_{1}.xml' generated.\033[0m").format(XML_FEED_FILENAME, language))
 

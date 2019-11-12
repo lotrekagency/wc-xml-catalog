@@ -20,7 +20,7 @@ switcher_item = {
         'attribute' : 'name'
     },
     'g:description' : {
-        'attribute' : 'description' 
+        'attribute' : 'short_description' 
     },
     'g:link' : {
         'attribute' : 'permalink'
