@@ -1,10 +1,10 @@
 from pywoo import Api
 from writer import write_xml
-from settings import LANGUAGES, WOO_HOST, WOO_CONSUMER_KEY, WOO_CONSUMER_SECRET, XML_FEED_FILENAME
+from settings import REDIS_HOST, LANGUAGES, WOO_HOST, WOO_CONSUMER_KEY, WOO_CONSUMER_SECRET, XML_FEED_FILENAME
 from utils import getShippingMethod, methods_list
 from huey import RedisHuey, crontab
 
-huey = RedisHuey('feedXML')
+huey = RedisHuey('feedXML', host=REDIS_HOST)
 api = Api(WOO_HOST, WOO_CONSUMER_KEY, WOO_CONSUMER_SECRET)
 
 @huey.periodic_task(crontab(minute="*/5"))
@@ -19,7 +19,7 @@ def createXML():
                 methods_list.append(getShippingMethod(method, location))
     for language in LANGUAGES:
         print(("\033[95m[Feed XML] Getting products information for language '{0}'...\033[0m").format(language))
-        products_list = [] 
+        products_list = []
         products = api.get_products(lang=language)
         for product in products:
             products_list.append(product)
