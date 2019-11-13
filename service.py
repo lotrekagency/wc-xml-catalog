@@ -10,6 +10,7 @@ api = Api(WOO_HOST, WOO_CONSUMER_KEY, WOO_CONSUMER_SECRET)
 @huey.periodic_task(crontab(minute="*/5"))
 def createXML():
     print("\033[95m[Feed XML] Getting shipping methods...\033[0m")
+    methods_list.clear()
     shipping_zones = api.get_shipping_zones()
     for zone in shipping_zones:
         zone_locations = api.get_shipping_zone_locations(shipping_zone_id=zone.id)
