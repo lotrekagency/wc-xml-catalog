@@ -9,6 +9,12 @@ switcher_channel = {
     'description': settings.XML_FEED_DESCRIPTION
 }
 
+switcher_google = {
+    'instock' : 'in stock',
+    'outofstock' : 'out of stock',
+    'onbackorder' : 'out of stock'
+}
+
 switcher_item = {
     'g:brand' : {
         'static' : settings.XML_SITE_NAME
@@ -17,10 +23,11 @@ switcher_item = {
         'attribute' : 'id'
     },
     'g:title' : {
-        'attribute' : 'name'
+        'attribute' : 'name',
+        'suffix' : (', {0}').format(settings.XML_SITE_NAME)
     },
     'g:description' : {
-        'attribute' : 'short_description' 
+        'attribute' : 'short_description'
     },
     'g:link' : {
         'attribute' : 'permalink'
@@ -37,7 +44,8 @@ switcher_item = {
         'logs' : False
     },
     'g:availability' : {
-        'attribute' : 'stock_status'
+        'attribute' : 'stock_status',
+        'replace' : switcher_google
     },
     'g:mpn' : {
         'attribute' : 'sku'
@@ -90,3 +98,21 @@ def get_index(path):
     else:
         return path_splitted, None
 
+def checkForPath(switcher, product):
+    if 'path' in switcher:
+        return get_path(product, switcher['path'])
+    else:
+        return product
+
+def checkForReplace(switcher, value):
+    if 'replace' in switcher:
+        if value in switcher['replace']:
+            return switcher['replace'][value]
+        return ''
+    return value
+
+def get_path(current_location, path):
+    attribute, index = get_index(path)
+    if index and getattr(current_location, attribute):
+        return getattr(current_location, attribute)[int(index)]
+    return attribute
