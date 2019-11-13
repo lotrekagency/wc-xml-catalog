@@ -1,3 +1,5 @@
 __pycache__/
 feeds/
 docker-compose.prod.yml
+xmlfeeds
+*.env
