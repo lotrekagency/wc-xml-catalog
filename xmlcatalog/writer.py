@@ -31,6 +31,12 @@ def get_switcher_attribute(switcher, item, product):
             if hasattr(path, value):
                 value = checkForReplace(switcher[attribute], getattr(path, value))
                 write_xml_attribute(value, item, attribute, switcher[attribute], product)
+            elif isinstance(path, list) and path:
+                concatenated_value = getattr(path[0], value)
+                for element in path[1:len(path)]:
+                    if hasattr(element, value):
+                        concatenated_value += (switcher[attribute].get('separator', '') + getattr(element, value)) 
+                write_xml_attribute(concatenated_value, item, attribute, switcher[attribute], product)
         if 'list' in switcher[attribute]:
             for element in switcher[attribute]['list']:
                 product_attribute = ET.SubElement(item, attribute)

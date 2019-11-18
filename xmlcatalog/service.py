@@ -21,12 +21,18 @@ def createXML():
     for language in LANGUAGES:
         print(("\033[95m[Feed XML] Getting products for language '{0}'...\033[0m").format(language))
         products_list = []
-        products = api.get_products(lang=language)
+        products = []
+        page_index = 1
+        products_request = api.get_products(lang=language, page=page_index)
+        while products_request:
+            products.extend(products_request)
+            page_index += 1
+            products_request = api.get_products(lang=language, page=page_index)
         print(("\033[95m[Feed XML] Generating '{0}_{1}_products.xml'...\033[0m").format(XML_FEED_FILENAME, language))
         write_xml(products, language, 'products')
         print(("\033[95m[Feed XML] Getting variations for language '{0}'...\033[0m").format(language))
         for product in products:
-            product_variations = api.get_product_variations(product_id=product.id, lang=language)
+            product_variations = api.get_product_variations(product_id=product.id, lang=language, per_page=100)
             for product_variation in product_variations:
                 obj = api.get_products(id=product_variation.id)
                 setattr(obj, 'parent_id', product.id)

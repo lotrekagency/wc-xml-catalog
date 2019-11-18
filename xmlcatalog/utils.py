@@ -64,6 +64,11 @@ switcher_item = {
         'attribute' : 'sale_price',
         'logs' : False
     },
+    'g:product_type' : {
+        'path' : 'categories',
+        'attribute' : 'name',
+        'separator' : ' > '
+    },
     'g:identifier_exists' : {
         'static' : 'yes'
     }
@@ -92,7 +97,9 @@ def split_path(path):
     return path_splitted if path_splitted else path
 
 def get_index(path):
-    path_splitted = path.replace(']', '[').split('[')
+    path_splitted = path
+    if ']' in path:
+        path_splitted = path_splitted.replace(']', '[').split('[')
     if isinstance(path_splitted, list):
         return path_splitted[0], path_splitted[-2]
     else:
@@ -115,4 +122,4 @@ def get_path(current_location, path):
     attribute, index = get_index(path)
     if index and getattr(current_location, attribute):
         return getattr(current_location, attribute)[int(index)]
-    return attribute
+    return getattr(current_location, attribute)
