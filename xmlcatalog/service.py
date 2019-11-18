@@ -5,9 +5,9 @@ from utils import getShippingMethod, methods_list
 from huey import RedisHuey, crontab
 
 huey = RedisHuey('feedXML', host=REDIS_HOST)
-api = Api(WOO_HOST, WOO_CONSUMER_KEY, WOO_CONSUMER_SECRET)
+api = Api(WOO_HOST, WOO_CONSUMER_KEY, WOO_CONSUMER_SECRET, console_logs=False)
 
-@huey.periodic_task(crontab(minute="*/5"))
+@huey.periodic_task(crontab(hour="*/7"))
 def createXML():
     print("\033[95m[Feed XML] Getting shipping methods...\033[0m")
     methods_list.clear()
@@ -36,8 +36,8 @@ def createXML():
             for product_variation in product_variations:
                 obj = api.get_products(id=product_variation.id)
                 setattr(obj, 'parent_id', product.id)
+                obj.categories = product.categories
                 obj.short_description = product.short_description
                 products_list.append(obj)
         print(("\033[95m[Feed XML] Generating '{0}_{1}_variations.xml'...\033[0m").format(XML_FEED_FILENAME, language))
         write_xml(products_list, language, 'variations')
-
