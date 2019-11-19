@@ -62,12 +62,13 @@ switcher_item = {
     },
     'g:sale_price' : {
         'attribute' : 'sale_price',
+        'suffix' : ' EUR',
         'logs' : False
     },
-    'g:product_type' : {
+    'g:category' : {
         'path' : 'categories',
         'attribute' : 'name',
-        'separator' : ' > '
+        'separator' : ' - '
     },
     'g:identifier_exists' : {
         'static' : 'yes'
