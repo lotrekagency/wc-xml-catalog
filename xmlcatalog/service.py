@@ -33,7 +33,6 @@ def createXML():
         print(("\033[95m[Feed XML] Getting variations for language '{0}'...\033[0m").format(language))
         for product in products:
             product_variations = api.get_product_variations(product_id=product.id, lang=language, per_page=100)
-            product.categories = product.categories.reverse()
             for product_variation in product_variations:
                 obj = api.get_products(id=product_variation.id)
                 setattr(obj, 'parent_id', product.id)
