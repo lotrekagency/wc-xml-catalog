@@ -73,6 +73,7 @@ Product variations objects can inherit parent product attributes by specifying t
 
 The mapping file it too is a JSON file and it contains all the references between products objects and the XML feed attributes.
 Example of mapping file is
+
     {
         "switcher_google" : {
             "True" : "in stock",
