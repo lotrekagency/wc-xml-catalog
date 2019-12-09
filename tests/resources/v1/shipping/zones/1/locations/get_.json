@@ -1,0 +1,18 @@
+[
+    {
+        "code": "IT",
+        "type": "country",
+        "_links": {
+            "collection": [
+                {
+                    "href": "https://www.link1.com"
+                }
+            ],
+            "describes": [
+                {
+                    "href": "https://www.link2.com"
+                }
+            ]
+        }
+    }
+]

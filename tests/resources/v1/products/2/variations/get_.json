@@ -1,0 +1,156 @@
+[
+    {
+        "id": 5,
+        "date_created": "2019-08-06T09:36:01",
+        "date_created_gmt": "2019-08-06T09:36:01",
+        "date_modified": "2019-12-02T23:05:52",
+        "date_modified_gmt": "2019-12-02T23:05:52",
+        "description": "",
+        "permalink": "http://link1.com",
+        "sku": "Example SKU",
+        "price": "100",
+        "regular_price": "100",
+        "sale_price": "",
+        "date_on_sale_from": null,
+        "date_on_sale_from_gmt": null,
+        "date_on_sale_to": null,
+        "date_on_sale_to_gmt": null,
+        "on_sale": false,
+        "status": "publish",
+        "purchasable": true,
+        "virtual": false,
+        "downloadable": false,
+        "downloads": [],
+        "download_limit": -1,
+        "download_expiry": -1,
+        "tax_status": "taxable",
+        "tax_class": "",
+        "manage_stock": false,
+        "stock_quantity": null,
+        "stock_status": "instock",
+        "backorders": "no",
+        "backorders_allowed": false,
+        "backordered": false,
+        "weight": "",
+        "dimensions": {
+            "length": "",
+            "width": "",
+            "height": ""
+        },
+        "shipping_class": "",
+        "shipping_class_id": 1,
+        "image": {
+            "id": 1,
+            "date_created": "2019-11-04T10:55:54",
+            "date_created_gmt": "2019-11-04T10:55:54",
+            "date_modified": "2019-11-04T10:56:13",
+            "date_modified_gmt": "2019-11-04T10:56:13",
+            "src": "https://exampleimage.com",
+            "name": "Example image",
+            "alt": "Example image"
+        },
+        "attributes": [
+            {
+                "id": 1,
+                "name": "Example attribute",
+                "option": "Example Option"
+            }
+        ],
+        "menu_order": 1,
+        "meta_data": [],
+        "_links": {
+            "self": [
+                {
+                    "href": "https://examplelink.com"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://examplelink.com"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://examplelink.com"
+                }
+            ]
+        }
+    },
+    {
+        "id": 6,
+        "date_created": "2019-08-06T09:36:01",
+        "date_created_gmt": "2019-08-06T09:36:01",
+        "date_modified": "2019-12-02T23:05:52",
+        "date_modified_gmt": "2019-12-02T23:05:52",
+        "description": "",
+        "permalink": "http://link1.com",
+        "sku": "Example SKU",
+        "price": "100",
+        "regular_price": "100",
+        "sale_price": "",
+        "date_on_sale_from": null,
+        "date_on_sale_from_gmt": null,
+        "date_on_sale_to": null,
+        "date_on_sale_to_gmt": null,
+        "on_sale": false,
+        "status": "publish",
+        "purchasable": true,
+        "virtual": false,
+        "downloadable": false,
+        "downloads": [],
+        "download_limit": -1,
+        "download_expiry": -1,
+        "tax_status": "taxable",
+        "tax_class": "",
+        "manage_stock": false,
+        "stock_quantity": null,
+        "stock_status": "instock",
+        "backorders": "no",
+        "backorders_allowed": false,
+        "backordered": false,
+        "weight": "",
+        "dimensions": {
+            "length": "",
+            "width": "",
+            "height": ""
+        },
+        "shipping_class": "",
+        "shipping_class_id": 1,
+        "image": {
+            "id": 1,
+            "date_created": "2019-11-04T10:55:54",
+            "date_created_gmt": "2019-11-04T10:55:54",
+            "date_modified": "2019-11-04T10:56:13",
+            "date_modified_gmt": "2019-11-04T10:56:13",
+            "src": "https://exampleimage.com",
+            "name": "Example image",
+            "alt": "Example image"
+        },
+        "attributes": [
+            {
+                "id": 1,
+                "name": "Example attribute",
+                "option": "Example Option"
+            }
+        ],
+        "menu_order": 1,
+        "meta_data": [],
+        "_links": {
+            "self": [
+                {
+                    "href": "https://examplelink.com"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://examplelink.com"
+                }
+            ],
+            "up": [
+                {
+                    "href": "https://examplelink.com"
+                }
+            ]
+        }
+    }
+]

@@ -1,0 +1,89 @@
+[
+    {
+        "id": 2,
+        "instance_id": 2,
+        "title": "Flat rate",
+        "order": 1,
+        "enabled": true,
+        "method_id": "flat_rate",
+        "method_title": "Flat rate",
+        "method_description": "",
+        "settings": {
+            "title": {
+                "id": "title",
+                "label": "Method title",
+                "description": "Method description",
+                "type": "text",
+                "value": "Flat rate",
+                "default": "Flat rate",
+                "tip": "Method tip",
+                "placeholder": ""
+            },
+            "tax_status": {
+                "id": "tax_status",
+                "label": "Tax status",
+                "description": "",
+                "type": "select",
+                "value": "taxable",
+                "default": "taxable",
+                "tip": "",
+                "placeholder": "",
+                "options": {
+                    "taxable": "",
+                    "none": ""
+                }
+            },
+            "cost": {
+                "id": "cost",
+                "label": "Cost",
+                "description": "Method description",
+                "type": "text",
+                "value": "10",
+                "default": "",
+                "tip": "Method tip",
+                "placeholder": ""
+            },
+            "class_costs": {
+                "id": "class_costs",
+                "label": "Class costs",
+                "description": "Method description",
+                "type": "title",
+                "value": null,
+                "default": "",
+                "tip": "Method tip",
+                "placeholder": ""
+            },
+            "type": {
+                "id": "type",
+                "label": "Type",
+                "description": "",
+                "type": "select",
+                "value": null,
+                "default": "class",
+                "tip": "",
+                "placeholder": "",
+                "options": {
+                    "class": "",
+                    "order": ""
+                }
+            }
+        },
+        "_links": {
+            "self": [
+                {
+                    "href": "https://www.link1.com"
+                }
+            ],
+            "collection": [
+                {
+                    "href": "https://www.link2.com"
+                }
+            ],
+            "describes": [
+                {
+                    "href": "https://www.link3.com"
+                }
+            ]
+        }
+    }
+]
