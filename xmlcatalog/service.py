@@ -6,8 +6,15 @@ from huey import RedisHuey, crontab
 from writer import write_xml
 
 huey = RedisHuey('feedXML', host=REDIS_HOST)
-fetch_switchers(json.load(open('../mapping.json')))
-conf = json.load(open('../config.json'))
+try:
+    fetch_switchers(json.load(open('../config/mapping.json')))
+except:
+    fetch_switchers(json.load(open('../default_mapping.json')))
+try:
+    conf = json.load(open('../config/config.json'))
+except:
+    conf = json.load(open('../default_config.json'))
+    
 api = Api(WOO_HOST, WOO_CONSUMER_KEY, WOO_CONSUMER_SECRET, console_logs=False)
 
 def apply_conf(obj, obj_fields, conf_path):
