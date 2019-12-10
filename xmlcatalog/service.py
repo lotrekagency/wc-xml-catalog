@@ -7,13 +7,13 @@ from writer import write_xml
 
 huey = RedisHuey('feedXML', host=REDIS_HOST)
 try:
-    fetch_switchers(json.load(open('../config/mapping.json')))
+    fetch_switchers(json.load(open('./config/mapping.json')))
 except:
-    fetch_switchers(json.load(open('../default_mapping.json')))
+    fetch_switchers(json.load(open('./default_mapping.json')))
 try:
-    conf = json.load(open('../config/config.json'))
+    conf = json.load(open('./config/config.json'))
 except:
-    conf = json.load(open('../default_config.json'))
+    conf = json.load(open('./default_config.json'))
     
 api = Api(WOO_HOST, WOO_CONSUMER_KEY, WOO_CONSUMER_SECRET, console_logs=False)
 
