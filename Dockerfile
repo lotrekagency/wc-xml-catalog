@@ -6,4 +6,4 @@ WORKDIR /app
 
 RUN pip install -r requirements.txt
 
-CMD [ "huey_consumer.py", "service.huey" ]
+CMD [ "huey_consumer.py", "tasks.huey" ]
