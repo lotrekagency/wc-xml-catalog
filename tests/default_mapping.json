@@ -1,0 +1,68 @@
+{
+    "switcher_google" : {
+        "True" : "in stock",
+        "False" : "out of stock"
+    },
+    "switcher_item" : {
+        "g:brand" : {
+            "static" : {
+                "variable" : "settings.XML_SITE_NAME"
+            }
+        },
+        "g:id" : {
+            "attribute" : "id"
+        },
+        "g:title" : {
+            "attribute" : "name"
+        },
+        "g:description" : {
+            "attribute" : "description"
+        },
+        "g:link" : {
+            "attribute" : "permalink"
+        },
+        "g:image_link" : {
+            "attribute" : "images"
+        },
+        "g:google_product_category" : {
+            "static" : {
+                "variable" : "settings.XML_GOOGLE_PRODUCT_CATEGORY"
+            }
+        },
+        "g:item_group_id" : {
+            "attribute" : "id"
+        },
+        "g:availability" : {
+            "attribute" : "in_stock",
+            "replace" : {
+                "variable" : "utils.switcher_google"
+            }
+        },
+        "g:mpn" : {
+            "attribute" : "sku"
+        },
+        "g:price" : {
+            "attribute" : "price",
+            "suffix" : " EUR"
+        },
+        "g:condition": {
+            "static" : "New"
+        },
+        "g:shipping" : {
+            "list" : {
+                "variable" : "utils.methods_list"
+            }
+        },
+        "g:sale_price" : {
+            "attribute" : "sale_price",
+            "suffix" : " EUR",
+            "logs" : false
+        },
+        "g:category" : {
+            "attribute" : "categories"
+        },
+        "g:identifier_exists" : {
+            "static" : "yes"
+        }
+    }
+}

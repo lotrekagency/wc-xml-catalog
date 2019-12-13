@@ -1,2 +1,3 @@
-from service import createXML, api
-createXML(api)
+from service import create_xml
+create_xml()
+

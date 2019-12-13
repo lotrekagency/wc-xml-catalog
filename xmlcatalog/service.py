@@ -2,10 +2,8 @@ import json
 from pywoo import Api
 from settings import REDIS_HOST, LANGUAGES, WOO_HOST, WOO_CONSUMER_KEY, WOO_CONSUMER_SECRET, XML_FEED_FILENAME
 from utils import get_conf_attribute, fetch_switchers, get_shipping_method, methods_list
-from huey import RedisHuey, crontab
 from writer import write_xml
 
-huey = RedisHuey('feedXML', host=REDIS_HOST)
 try:
     fetch_switchers(json.load(open('./config/mapping.json')))
 except:
@@ -14,8 +12,6 @@ try:
     conf = json.load(open('./config/config.json'))
 except:
     conf = json.load(open('./default_config.json'))
-    
-api = Api(WOO_HOST, WOO_CONSUMER_KEY, WOO_CONSUMER_SECRET, console_logs=False)
 
 def apply_conf(obj, obj_fields, conf_path):
     if 'attributes' in conf[conf_path]:
@@ -29,8 +25,8 @@ def apply_conf(obj, obj_fields, conf_path):
                     return None
     return obj
 
-@huey.periodic_task(crontab(hour="*/7"))
-def createXML(api):
+def create_xml():
+    api = Api(WOO_HOST, WOO_CONSUMER_KEY, WOO_CONSUMER_SECRET, console_logs=False)
     print("\033[95m[Feed XML] Getting shipping methods...\033[0m")
     methods_list.clear()
     shipping_zones = api.get_shipping_zones()
