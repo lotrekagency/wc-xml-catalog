@@ -1,63 +1,60 @@
 import json
 from pywoo import Api
-from settings import REDIS_HOST, LANGUAGES, WOO_HOST, WOO_CONSUMER_KEY, WOO_CONSUMER_SECRET, XML_FEED_FILENAME
-from utils import get_conf_attribute, fetch_switchers, get_shipping_method, methods_list
+import settings
+import utils
 from writer import write_xml
+from products import FeedProduct
 
 try:
-    fetch_switchers(json.load(open('./config/mapping.json')))
-except:
-    fetch_switchers(json.load(open('./default_mapping.json')))
-try:
-    conf = json.load(open('./config/config.json'))
+    conf = json.load(open('./config.json'))
 except:
     conf = json.load(open('./default_config.json'))
 
-def apply_conf(obj, obj_fields, conf_path):
-    if 'attributes' in conf[conf_path]:
-        attributes = conf[conf_path]['attributes']
-        for attribute in attributes:
-            if 'attribute' in attributes[attribute]:
-                value = get_conf_attribute(attributes[attribute]['attribute'], obj, obj_fields)
-                setattr(obj, attribute, value)
-            if 'fatal' in attributes[attribute] and attributes[attribute]['fatal']:
-                if not getattr(obj, attribute):
-                    return None
-    return obj
+
+def get_products(api, language, products=[], page=1):
+    current_products = [FeedProduct(product) for product in api.get_products(lang=language, page=page)]
+    if not current_products:
+        return products
+    return get_products(api, language, (products + current_products), (page + 1))
+
+def get_product_variations(api, language, product_id, variations=[], page=1):
+    current_variations = api.get_product_variations(product_id=product_id, lang=language, page=page)
+    if not current_variations:
+        return variations
+    return get_product_variations(api, language, product_id, (variations + current_variations), (page + 1))
+
+def get_variations(api, language, products, variations=[]):
+    for product in products:
+        product_variations = get_product_variations(api, language, product.id)
+        for variation in product_variations:
+            variations.append(FeedProduct(api.get_products(id=variation.id), product))
+    return variations
 
 def create_xml():
-    api = Api(WOO_HOST, WOO_CONSUMER_KEY, WOO_CONSUMER_SECRET, console_logs=False)
+    api = Api(settings.WOO_HOST, settings.WOO_CONSUMER_KEY, settings.WOO_CONSUMER_SECRET, console_logs=False)
     print("\033[95m[Feed XML] Getting shipping methods...\033[0m")
-    methods_list.clear()
+    utils.default_shippings.clear()
     shipping_zones = api.get_shipping_zones()
     for zone in shipping_zones:
         zone_locations = api.get_shipping_zone_locations(shipping_zone_id=zone.id)
         zone_methods = api.get_shipping_zone_methods(shipping_zone_id=zone.id)
         for location in zone_locations:
             for method in zone_methods:
-                methods_list.append(get_shipping_method(method, location))
-    for language in LANGUAGES:
+                utils.default_shippings.append(utils.get_shipping_method(method, location))
+    print("\033[95m[Feed XML] Getting taxes...\033[0m")
+    taxes = api.get_tax_rates()
+    for language in settings.LANGUAGES:
+        if settings.XML_USE_TAXES:
+            utils.tax_rate = next((rate.rate for rate in taxes if rate.country.lower() == language.lower()), None)
         print(("\033[95m[Feed XML] Getting products for language '{0}'...\033[0m").format(language))
-        products = []
-        variations = []
-        page_index = 1
-        products_request = api.get_products(lang=language, page=page_index)
-        while products_request:
-            for product in products_request:
-                obj = apply_conf(product, None, 'products')
-                if obj:
-                    products.append(obj)
-            page_index += 1
-            products_request = api.get_products(lang=language, page=page_index)
-        print(("\033[95m[Feed XML] Generating '{0}_{1}_products.xml'...\033[0m").format(XML_FEED_FILENAME, language))
-        write_xml(products, language, 'products')
+        products = get_products(api, language)
         print(("\033[95m[Feed XML] Getting variations for language '{0}'...\033[0m").format(language))
-        for product in products:
-            if product:
-                product_variations = api.get_product_variations(product_id=product.id, lang=language, per_page=100)
-                for product_variation in product_variations:
-                    obj = apply_conf(api.get_products(id=product_variation.id), product, 'variations')
-                    if obj:
-                        variations.append(obj)
-        print(("\033[95m[Feed XML] Generating '{0}_{1}_variations.xml'...\033[0m").format(XML_FEED_FILENAME, language))
-        write_xml(variations, language, 'variations')
+        variations = get_variations(api, language, products)
+        products = products + variations
+
+        print(("\033[95m[Feed XML] Generating '{0}_{1}_products.xml'...\033[0m").format(settings.XML_FEED_FILENAME, language))
+        selected_products = filter(lambda product: product.type in settings.XML_TYPES_IN_PRODUCTS, products)
+        write_xml(selected_products, language, 'products')
+        print(("\033[95m[Feed XML] Generating '{0}_{1}_variations.xml'...\033[0m").format(settings.XML_FEED_FILENAME, language))
+        selected_variations = filter(lambda product: product.type in settings.XML_TYPES_IN_VARIATIONS, products)
+        write_xml(selected_variations, language, 'variations')

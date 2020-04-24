@@ -1,0 +1,186 @@
+{
+  "variable" : {
+    "g:brand" : {
+      "default" : "XML_SITE_NAME"
+    },
+    "g:id" : {
+      "attribute" : "id"
+    },
+    "g:title" : {
+      "attribute" : "meta_data(key=title).value"
+    },
+    "g:description" : {
+      "attribute" : "meta_data(key=description).value"
+    },
+    "g:link" : {
+      "attribute" : "permalink"
+    },
+    "g:image_link" : {
+      "attribute" : "images[0].src"
+    },
+    "g:google_product_category" : {
+      "default" : "XML_GOOGLE_PRODUCT_CATEGORY"
+    },
+    "g:availability" : {
+      "attribute" : "in_stock",
+      "replacer" : {
+        "True" : "in stock",
+        "False" : "out of stock"
+      }
+    },
+    "g:mpn" : {
+      "attribute" : "id"
+    },
+    "g:price" : {
+      "attribute" : "price",
+      "suffix" : " EUR",
+      "fatal" : true
+    },
+    "g:condition": {
+      "static" : "New"
+    },
+    "g:shipping" : {
+      "default" : "default_shippings",
+      "unique" : true
+    },
+    "g:sale_price" : {
+      "attribute" : "sale_price",
+      "suffix" : " EUR",
+      "logs" : false
+    },
+    "g:category" : {
+      "attribute" : "categories.name",
+      "separator" : " - "
+    },
+    "g:identifier_exists" : {
+      "static" : "yes"
+    },
+    "g:sell_on_google_quantity" : {
+      "static" : "1000000"
+    }
+  },
+  "variation" : {
+    "g:brand" : {
+      "default" : "XML_SITE_NAME"
+    },
+    "g:id" : {
+      "attribute" : "id"
+    },
+    "g:title" : {
+      "parent" : "meta_data(key=title).value",
+      "attribute" : "attributes[0].option"
+    },
+    "g:description" : {
+      "parent" : "meta_data(key=description).value"
+    },
+    "g:link" : {
+      "attribute" : "permalink"
+    },
+    "g:image_link" : {
+      "parent" : "images[0].src"
+    },
+    "g:google_product_category" : {
+      "default" : "XML_GOOGLE_PRODUCT_CATEGORY"
+    },
+    "g:availability" : {
+      "attribute" : "in_stock",
+      "replacer" : {
+        "True" : "in stock",
+        "False" : "out of stock"
+      }
+    },
+    "g:mpn" : {
+      "attribute" : "sku"
+    },
+    "g:price" : {
+      "attribute" : "price",
+      "suffix" : " EUR",
+      "fatal" : true
+    },
+    "g:condition": {
+      "static" : "New"
+    },
+    "g:shipping" : {
+      "default" : "default_shippings",
+      "unique" : true
+    },
+    "g:sale_price" : {
+      "attribute" : "sale_price",
+      "suffix" : " EUR",
+      "logs" : false
+    },
+    "g:category" : {
+      "parent" : "categories.name",
+      "separator" : " - "
+    },
+    "g:identifier_exists" : {
+      "static" : "yes"
+    },
+    "g:item_group_id" : {
+      "parent" : "id"
+    },
+    "g:sell_on_google_quantity" : {
+      "static" : "1000000"
+    }
+  },
+  "simple" : {
+    "g:brand" : {
+      "default" : "XML_SITE_NAME"
+    },
+    "g:id" : {
+      "attribute" : "id"
+    },
+    "g:title" : {
+      "attribute" : "meta_data(key=title).value"
+    },
+    "g:description" : {
+      "attribute" : "meta_data(key=description).value"
+    },
+    "g:link" : {
+      "attribute" : "permalink"
+    },
+    "g:image_link" : {
+      "attribute" : "images[0].src"
+    },
+    "g:google_product_category" : {
+      "default" : "XML_GOOGLE_PRODUCT_CATEGORY"
+    },
+    "g:availability" : {
+      "attribute" : "in_stock",
+      "replacer" : {
+        "True" : "in stock",
+        "False" : "out of stock"
+      }
+    },
+    "g:mpn" : {
+      "attribute" : "id"
+    },
+    "g:price" : {
+      "attribute" : "price",
+      "suffix" : " EUR",
+      "fatal" : true
+    },
+    "g:condition": {
+      "static" : "New"
+    },
+    "g:shipping" : {
+      "default" : "default_shippings",
+      "unique" : true
+    },
+    "g:sale_price" : {
+      "attribute" : "sale_price",
+      "suffix" : " EUR",
+      "logs" : false
+    },
+    "g:category" : {
+      "attribute" : "categories.name",
+      "separator" : " - "
+    },
+    "g:identifier_exists" : {
+      "static" : "yes"
+    },
+    "g:sell_on_google_quantity" : {
+      "static" : "1000000"
+    }
+  }
+}
