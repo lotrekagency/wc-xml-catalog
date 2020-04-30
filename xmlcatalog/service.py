@@ -58,3 +58,6 @@ def create_xml():
         print(("\033[95m[Feed XML] Generating '{0}_{1}_variations.xml'...\033[0m").format(settings.XML_FEED_FILENAME, language))
         selected_variations = filter(lambda product: product.type in settings.XML_TYPES_IN_VARIATIONS, products)
         write_xml(selected_variations, language, 'variations')
+
+        products.clear()
+        variations.clear()
