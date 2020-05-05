@@ -30,6 +30,13 @@ def get_variations(api, language, products, variations=[]):
             variations.append(FeedProduct(api.get_products(id=variation.id), product))
     return variations
 
+def get_tax_rates(api, tax_rates=[], page=1):
+    current_tax_rates = api.get_tax_rates(page=page)
+    if not current_tax_rates:
+        utils.set_tax_rates(tax_rates)
+        return tax_rates
+    return get_tax_rates(api, (tax_rates + current_tax_rates), (page + 1))
+
 def create_xml():
     api = Api(settings.WOO_HOST, settings.WOO_CONSUMER_KEY, settings.WOO_CONSUMER_SECRET, console_logs=False)
     print("\033[95m[Feed XML] Getting shipping methods...\033[0m")
@@ -41,11 +48,9 @@ def create_xml():
         for location in zone_locations:
             for method in zone_methods:
                 utils.default_shippings.append(utils.get_shipping_method(method, location))
-    print("\033[95m[Feed XML] Getting taxes...\033[0m")
-    taxes = api.get_tax_rates()
+    print("\033[95m[Feed XML] Getting tax rates...\033[0m")
+    get_tax_rates(api)
     for language in settings.LANGUAGES:
-        if settings.XML_USE_TAXES:
-            utils.tax_rate = next((rate.rate for rate in taxes if rate.country.lower() == language.lower()), None)
         print(("\033[95m[Feed XML] Getting products for language '{0}'...\033[0m").format(language))
         products = get_products(api, language)
         print(("\033[95m[Feed XML] Getting variations for language '{0}'...\033[0m").format(language))

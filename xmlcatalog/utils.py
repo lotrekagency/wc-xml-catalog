@@ -8,6 +8,7 @@ XML_FEED_DESCRIPTION = settings.XML_FEED_DESCRIPTION
 XML_GOOGLE_PRODUCT_CATEGORY = settings.XML_GOOGLE_PRODUCT_CATEGORY
 
 default_shippings = []
+default_tax_rates = []
 tax_rate = None
 
 switcher_channel = {
@@ -33,6 +34,22 @@ def get_shipping_method(method, location):
         }
     }
     return shipping_method
+
+def set_tax_rates(rates):
+    for rate in rates:
+        default_tax_rates.append(
+            {
+                'g:country' : {
+                    'static' : rate.country
+                },
+                'g:rate' : {
+                    'static' : rate.rate
+                },
+                'g:tax_ship' : {
+                    'static' : 'yes' if rate.shipping else 'no'
+                }
+            }
+        )
 
 def get_default_value(reference_string):
     return globals().get(reference_string, None)

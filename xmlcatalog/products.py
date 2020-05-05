@@ -10,12 +10,6 @@ class FeedProduct(Product):
     def __getattr__(self, attr):
         return getattr(self._product, attr)
 
-    def get_taxed_price(self, value, rate):
-        try:
-            return str(round(float(value) + ((float(value) / 100) * float(rate)), 2))
-        except ValueError:
-            return None
-
     def get_value(self, fieldname):
         fieldnames = fieldname.split('.')
         def select(path, fieldname):
@@ -51,15 +45,12 @@ class FeedProduct(Product):
             value = [getattr(obj, fieldname) for obj in path]
         else:
             value = getattr(path, fieldname)
-        return value
+        return str(value)
 
     def process_value(self, value, config):
         is_valid = True
         if value:
-            if config.get('unique'):
-                if type(value) not in [dict, list]:
-                    value = str(value)
-            elif config.get('separator'):
+            if config.get('separator'):
                 separator = config.get('separator')
                 if isinstance(value, list):
                     processed_value = config.get('prefix', '') + str(value[0]) + config.get('suffix', '')
@@ -69,12 +60,12 @@ class FeedProduct(Product):
             elif 'replacer' in config:
                 replacer_switcher = config['replacer']
                 value = replacer_switcher.get(str(value))
-            else:
+            if not type(value) in [dict, list]:
                 value = config.get('prefix', '') + str(value) + config.get('suffix', '')
         else:
             if config.get('fatal'):
                 is_valid = False
-        return value, is_valid
+        return value, is_valid, config.get('unique')
 
     def read_config_value(self, config):
         value = None
@@ -101,18 +92,5 @@ class FeedProduct(Product):
                 if remaining_value:
                     value = value + ', ' + remaining_value
         return self.process_value(value, config)
-
-    @property
-    def price(self):
-        if utils.tax_rate:
-            return self.get_taxed_price(self._product.price, utils.tax_rate)
-        return self._product.price
-
-    @property
-    def sale_price(self):
-        if utils.tax_rate:
-            return self.get_taxed_price(self._product.sale_price, utils.tax_rate)
-        return self._product.sale_price
-
 
 

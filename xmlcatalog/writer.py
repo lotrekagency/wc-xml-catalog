@@ -32,18 +32,23 @@ def create_subelement(config, product):
 def get_switcher_attribute(config, item, product):
     is_valid = True
     for attribute in config:
-        value, is_valid = product.read_config(config[attribute])
+        value, is_valid, unique = product.read_config(config[attribute])
         if not is_valid:
             break
         if value:
-            write_xml_attribute(value, item, attribute, product)
+            write_xml_attribute(value, item, attribute, product, unique)
     return is_valid
 
-def write_xml_attribute(value, item, attribute, product):
+def write_xml_attribute(value, item, attribute, product, is_unique):
     if isinstance(value, list):
-        for element in value:
+        if is_unique:
+            for element in value:
+                main_attribute = ET.SubElement(item, attribute)
+                get_switcher_attribute(element, main_attribute, product)
+        else:
             main_attribute = ET.SubElement(item, attribute)
-            get_switcher_attribute(element, main_attribute, product)
+            for element in value:
+                get_switcher_attribute(element, main_attribute, product)
     else:
         product_attribute = ET.SubElement(item, attribute)
         product_attribute.text = value
