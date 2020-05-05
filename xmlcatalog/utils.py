@@ -5,7 +5,6 @@ import pywoo
 XML_SITE_NAME = settings.XML_SITE_NAME
 XML_SITE_HOST = settings.XML_SITE_HOST
 XML_FEED_DESCRIPTION = settings.XML_FEED_DESCRIPTION
-XML_GOOGLE_PRODUCT_CATEGORY = settings.XML_GOOGLE_PRODUCT_CATEGORY
 
 default_shippings = []
 default_tax_rates = []
