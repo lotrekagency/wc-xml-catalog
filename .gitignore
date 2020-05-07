@@ -4,3 +4,4 @@ docker-compose.prod.yml
 xmlfeeds
 *.env
 .pytest_cache/
+config.json
