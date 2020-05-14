@@ -11,7 +11,7 @@ class FeedProduct(Product):
         try:
             return getattr(self._product, attr)
         except AttributeError as exception:
-            raise type(exception)(("{0} at product ID {1} with value '{2}'").format(exception, self.id, attr))
+            raise type(exception)(("{0} at product ID {1} with attribute '{2}'").format(exception, self.id, attr))
 
     def get_value(self, fieldname):
         fieldnames = fieldname.split('.')
