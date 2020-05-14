@@ -8,7 +8,10 @@ class FeedProduct(Product):
         self._parent = parent
 
     def __getattr__(self, attr):
-        return getattr(self._product, attr)
+        try:
+            return getattr(self._product, attr)
+        except AttributeError as exception:
+            raise type(exception)(("{0} at product ID {1} with value '{2}'").format(exception, self.id, attr))
 
     def get_value(self, fieldname):
         fieldnames = fieldname.split('.')
