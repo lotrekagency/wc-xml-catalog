@@ -5,12 +5,6 @@ import utils
 from writer import write_xml
 from products import FeedProduct
 
-try:
-    conf = json.load(open('./config.json'))
-except:
-    conf = json.load(open('./default_config.json'))
-
-
 def get_products(api, language, products=[], page=1):
     current_products = [FeedProduct(product) for product in api.get_products(lang=language, page=page)]
     if not current_products:
