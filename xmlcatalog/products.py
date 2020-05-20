@@ -8,13 +8,11 @@ class FeedProduct(Product):
         self._parent = parent
 
     def __getattr__(self, attr):
-        try:
-            return getattr(self._product, attr)
-        except AttributeError as exception:
-            raise type(exception)(("{0} at product ID {1} with attribute '{2}'").format(exception, self.id, attr))
+        return getattr(self._product, attr)
 
     def get_value(self, fieldname):
         fieldnames = fieldname.split('.')
+
         def select(path, fieldname):
             if ']' in fieldname:
                 fieldname_split = fieldname.replace(']', '[').split('[')
@@ -35,20 +33,24 @@ class FeedProduct(Product):
                     return None, True
             return path, False
 
-        path = self
-        for fieldname in fieldnames[:-1]:
-            path, conditions = select(path, fieldname)
-            if not conditions:
-                path = getattr(path, fieldname)
-        fieldname = fieldnames[-1]
-        value = None
-        if isinstance(path, dict):
-            value = path.get(fieldname)
-        elif isinstance(path, list):
-            value = [getattr(obj, fieldname) for obj in path]
-        else:
-            value = getattr(path, fieldname)
-        return str(value)
+        try:
+            path = self
+            for field in fieldnames[:-1]:
+                path, conditions = select(path, field)
+                if not conditions:
+                    path = getattr(path, field)
+            field = fieldnames[-1]
+            value = None
+            if isinstance(path, dict):
+                value = path.get(field)
+            elif isinstance(path, list):
+                value = [getattr(obj, field) for obj in path]
+            else:
+                value = getattr(path, field)
+            return str(value)
+        except Exception as exception:
+            raise type(exception)(("{0} at product ID {1} with attribute '{2}'").format(exception, self.id, fieldname))
+
 
     def process_value(self, value, config):
         is_valid = True
