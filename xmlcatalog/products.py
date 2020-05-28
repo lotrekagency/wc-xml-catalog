@@ -47,7 +47,7 @@ class FeedProduct(Product):
                 value = [getattr(obj, field) for obj in path]
             else:
                 value = getattr(path, field)
-            return str(value)
+            return value
         except Exception as exception:
             raise type(exception)(("{0} at product ID {1} with attribute '{2}'").format(exception, self.id, fieldname))
 
