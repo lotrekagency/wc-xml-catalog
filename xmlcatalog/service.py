@@ -35,6 +35,7 @@ def create_xml():
     api = Api(settings.WOO_HOST, settings.WOO_CONSUMER_KEY, settings.WOO_CONSUMER_SECRET, console_logs=False)
     print("\033[95m[Feed XML] Getting shipping methods...\033[0m")
     utils.default_shippings.clear()
+    utils.default_tax_rates.clear()
     shipping_zones = api.get_shipping_zones()
     for zone in shipping_zones:
         zone_locations = api.get_shipping_zone_locations(shipping_zone_id=zone.id)
