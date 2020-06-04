@@ -88,13 +88,12 @@ In the following example two types of products are configured: `variable` and `v
             "False" : "out of stock"
           }
         }
-    }
       },
       "variation" : {
         "g:title" : {
           "parent" : "meta_data(key=title).value",
           "attribute" : "attributes[0].option"
-        }
+        },
         "g:shipping" : {
           "default" : "default_shippings",
           "unique" : true
@@ -106,7 +105,7 @@ In the following example two types of products are configured: `variable` and `v
         "g:category" : {
           "attribute" : "categories.name",
           "separator" : " - "
-        }
+        },
         "g:description" : {
           "attribute" : "meta_data(key=description).value"
         }
