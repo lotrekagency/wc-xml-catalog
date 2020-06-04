@@ -1,0 +1,146 @@
+{
+    "id": 5,
+    "name": "Example1",
+    "slug": "example1",
+    "permalink": "http://link1.com",
+    "date_created": "2019-11-04T10:35:47",
+    "date_created_gmt": "2019-11-04T10:35:47",
+    "date_modified": "2019-12-02T23:03:16",
+    "date_modified_gmt": "2019-12-02T23:03:16",
+    "type": "variation",
+    "status": "publish",
+    "featured": false,
+    "catalog_visibility": "visible",
+    "description": "Example description",
+    "short_description": "Example short description",
+    "sku": "Example SKU",
+    "price": "100",
+    "regular_price": "",
+    "sale_price": "",
+    "date_on_sale_from": null,
+    "date_on_sale_from_gmt": null,
+    "date_on_sale_to": null,
+    "date_on_sale_to_gmt": null,
+    "price_html": "",
+    "on_sale": false,
+    "purchasable": true,
+    "total_sales": 0,
+    "virtual": false,
+    "downloadable": false,
+    "downloads": [],
+    "download_limit": -1,
+    "download_expiry": -1,
+    "external_url": "",
+    "button_text": "",
+    "tax_status": "taxable",
+    "tax_class": "",
+    "manage_stock": false,
+    "stock_quantity": null,
+    "stock_status": "instock",
+    "backorders": "no",
+    "backorders_allowed": false,
+    "backordered": false,
+    "sold_individually": false,
+    "weight": "",
+    "dimensions": {
+        "length": "",
+        "width": "",
+        "height": ""
+    },
+    "shipping_required": true,
+    "shipping_taxable": true,
+    "shipping_class": "",
+    "shipping_class_id": 0,
+    "reviews_allowed": true,
+    "average_rating": "5.00",
+    "rating_count": 0,
+    "related_ids": [
+        10001,
+        10002,
+        10003
+    ],
+    "upsell_ids": [],
+    "cross_sell_ids": [],
+    "parent_id": 0,
+    "purchase_note": "",
+    "categories": [
+        {
+            "id": 1,
+            "name": "Example category1",
+            "slug": "example_category1"
+        },
+        {
+            "id": 2,
+            "name": "Example category2",
+            "slug": "example_category2"
+        }
+    ],
+    "tags": [],
+    "images": [
+        {
+            "id": 1,
+            "date_created": "2019-11-04T10:55:54",
+            "date_created_gmt": "2019-11-04T10:55:54",
+            "date_modified": "2019-11-04T10:56:13",
+            "date_modified_gmt": "2019-11-04T10:56:13",
+            "src": "https://exampleimage.com",
+            "name": "Example image",
+            "alt": "Example image"
+        },
+        {
+            "id": 2,
+            "date_created": "2019-11-04T10:55:54",
+            "date_created_gmt": "2019-11-04T10:55:54",
+            "date_modified": "2019-11-04T10:56:13",
+            "date_modified_gmt": "2019-11-04T10:56:13",
+            "src": "https://exampleimage2.com",
+            "name": "Example image",
+            "alt": "Example image"
+        }
+    ],
+    "attributes": [
+        {
+            "id": 7,
+            "name": "Example attribute",
+            "position": 0,
+            "visible": true,
+            "variation": true,
+            "options": [
+                "Example option",
+                "Example option"
+            ]
+        }
+    ],
+    "default_attributes": [],
+    "variations": [
+        10003,
+        10004
+    ],
+    "grouped_products": [],
+    "menu_order": 100,
+    "meta_data": [],
+    "brands": [
+        {
+            "id": 179,
+            "name": "Example brand",
+            "slug": "example brand"
+        }
+    ],
+    "wcpa_form_fields": null,
+    "translations": {
+        "en": "100000"
+    },
+    "lang": "it",
+    "_links": {
+        "self": [
+            {
+                "href": "https://examplelink.com"
+            }
+        ],
+        "collection": [
+            {
+                "href": "https://examplelink.com"
+            }
+        ]
+    }
+}

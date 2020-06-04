@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1,
+    "country": "IT",
+    "state": "",
+    "postcode": "",
+    "city": "",
+    "rate": "22.0000",
+    "name": "Tax",
+    "priority": 1,
+    "compound": false,
+    "shipping": false,
+    "order": 1,
+    "class": "standard",
+    "_links": {
+        "self": [
+            {
+                "href": "https://www.example.com/wp-json/wc/v3/taxes/1"
+            }
+        ],
+        "collection": [
+            {
+                "href": "https://www.example.com/wp-json/wc/v3/taxes"
+            }
+        ]
+    }
+}
+]

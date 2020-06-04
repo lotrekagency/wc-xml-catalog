@@ -1,5 +1,6 @@
 import json
 import os
+from urllib.parse import urlparse
 
 class MockResponse:
     def __init__(self, text, ok=True, status_code=200):
@@ -13,7 +14,10 @@ class MockResponse:
 
 def mock_request(method, url, *args, **kwargs):
     try:
-        file = open(os.path.join(*(['resources'] + url.split("/")[3:] + [('{0}_{1}.json').format(method.lower(), kwargs.get('params', None).get('page', ''))] )), 'r')
+        if 'page' in kwargs['params'] and kwargs['params']['page'] > 1:
+            return MockResponse(text='[]')
+        url = urlparse(url).path
+        file = open(os.path.join(*(['resources'] + url.split("/")[4:] + ['get.json'])), 'r')
     except:
         return MockResponse(text='[]')
     response = MockResponse(file.read())
