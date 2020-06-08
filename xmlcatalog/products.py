@@ -98,4 +98,17 @@ class FeedProduct(Product):
                     value = value + ', ' + remaining_value
         return self.process_value(value, config)
 
+    def get_taxed_price(self, value, rate):
+        try:
+            return str(round(float(value) + ((float(value) / 100) * float(rate)), 2))
+        except Exception:
+            return None
+
+    @property
+    def taxed_price(self):
+        return self.get_taxed_price(self._product.price, utils.current_tax_rate)
+
+    @property
+    def taxed_sale_price(self):
+        return self.get_taxed_price(self._product.sale_price, utils.current_tax_rate)
 

@@ -44,8 +44,9 @@ def create_xml():
             for method in zone_methods:
                 utils.default_shippings.append(utils.get_shipping_method(method, location))
     print("\033[95m[Feed XML] Getting tax rates...\033[0m")
-    get_tax_rates(api)
+    taxes = get_tax_rates(api)
     for language in settings.LANGUAGES:
+        utils.current_tax_rate = next((rate.rate for rate in taxes if rate.country.lower() == language.lower()), None)
         print(("\033[95m[Feed XML] Getting products for language '{0}'...\033[0m").format(language))
         products = get_products(api, language)
         print(("\033[95m[Feed XML] Getting variations for language '{0}'...\033[0m").format(language))
