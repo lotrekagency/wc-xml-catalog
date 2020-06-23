@@ -28,8 +28,12 @@ class FeedProduct(Product):
                     current_location = getattr(path, attribute)
                     if isinstance(current_location, list):
                         for obj in current_location:
-                            if obj.get(key, None) == value:
-                                return obj, True
+                            if isinstance(obj, dict):
+                                if obj.get(key, None) == value:
+                                    return obj, True
+                            else:
+                                if getattr(obj, key, None) == value:
+                                    return obj, True
                     return None, True
             return path, False
 
@@ -46,7 +50,9 @@ class FeedProduct(Product):
             elif isinstance(path, list):
                 value = [getattr(obj, field) for obj in path]
             else:
-                value = getattr(path, field)
+                value, conditions = select(path, field)
+                if not conditions:
+                    value = getattr(value, field)
             return value
         except Exception as exception:
             raise type(exception)(("{0} at product ID {1} with attribute '{2}'").format(exception, self.id, fieldname))
@@ -67,10 +73,18 @@ class FeedProduct(Product):
                 value = replacer_switcher.get(str(value))
             if not type(value) in [dict, list]:
                 value = config.get('prefix', '') + str(value) + config.get('suffix', '')
+            if 'fatal' in config:
+                fatal_value = config.get('fatal')
+                if isinstance(fatal_value, list):
+                    fatal_value = list(map(str, fatal_value))
+                    if not str(value) in fatal_value:
+                        is_valid = False
+                elif not str(value) == str(fatal_value):
+                    is_valid = False
         else:
             if config.get('fatal'):
                 is_valid = False
-        return value, is_valid, config.get('unique')
+        return value, is_valid, config.get('unique'), config.get('visible', True)
 
     def read_config_value(self, config):
         value = None

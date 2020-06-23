@@ -32,11 +32,12 @@ def create_subelement(config, product):
 def get_switcher_attribute(config, item, product):
     is_valid = True
     for attribute in config:
-        value, is_valid, unique = product.read_config(config[attribute])
+        value, is_valid, unique, is_visible = product.read_config(config[attribute])
         if not is_valid:
             break
         if value:
-            write_xml_attribute(value, item, attribute, product, unique)
+            if is_visible:
+                write_xml_attribute(value, item, attribute, product, unique)
     return is_valid
 
 def write_xml_attribute(value, item, attribute, product, is_unique):
