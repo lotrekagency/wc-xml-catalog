@@ -6,12 +6,12 @@ from settings import XML_FEED_FILENAME, XML_SITE_NAME, XML_SITE_HOST, XML_FEED_D
 import utils
 from products import FeedProduct
 
-def write_xml(products, language, product_type):
+def write_xml(products, language, filename):
     rss = ET.Element('rss')
     rss.set('version', '2.0')
     rss.set('xmlns:g', 'http://base.google.com/ns/1.0')
     channel = ET.SubElement(rss, 'channel')
-    config = json.load(open(settings.XML_CONFIG_PATH))
+    config = json.load(open(settings.XML_CONFIG_PATH))[filename]
     for attribute in utils.switcher_channel:
         item = ET.SubElement(channel, attribute)
         item.text = utils.switcher_channel[attribute]
@@ -21,8 +21,8 @@ def write_xml(products, language, product_type):
             channel.append(item)
     root = ET.ElementTree(rss)
     os.makedirs('feeds', exist_ok=True)
-    root.write('feeds/{0}_{1}_{2}.xml'.format(XML_FEED_FILENAME, language, product_type))
-    print(("\033[92m\033[1m[Feed XML] '{0}_{1}_{2}.xml' generated.\033[0m").format(XML_FEED_FILENAME, language, product_type))
+    root.write('feeds/{0}_{1}_{2}.xml'.format(XML_FEED_FILENAME, language, filename))
+    print(("\033[92m\033[1m[Feed XML] '{0}_{1}_{2}.xml' generated.\033[0m").format(XML_FEED_FILENAME, language, filename))
 
 def create_subelement(config, product):
     item = ET.Element('item')

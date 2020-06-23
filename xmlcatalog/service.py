@@ -4,6 +4,7 @@ import settings
 import utils
 from writer import write_xml
 from products import FeedProduct
+import json
 
 def get_products(api, language, products=[], page=1):
     current_products = [FeedProduct(product) for product in api.get_products(lang=language, page=page)]
@@ -33,6 +34,7 @@ def get_tax_rates(api, tax_rates=[], page=1):
 
 def create_xml():
     api = Api(settings.WOO_HOST, settings.WOO_CONSUMER_KEY, settings.WOO_CONSUMER_SECRET, console_logs=False)
+    config = json.load(open(settings.XML_CONFIG_PATH))
     print("\033[95m[Feed XML] Getting shipping methods...\033[0m")
     utils.default_shippings.clear()
     utils.default_tax_rates.clear()
@@ -53,12 +55,10 @@ def create_xml():
         variations = get_variations(api, language, products)
         products = products + variations
 
-        print(("\033[95m[Feed XML] Generating '{0}_{1}_products.xml'...\033[0m").format(settings.XML_FEED_FILENAME, language))
-        selected_products = filter(lambda product: product.type in settings.XML_TYPES_IN_PRODUCTS, products)
-        write_xml(selected_products, language, 'products')
-        print(("\033[95m[Feed XML] Generating '{0}_{1}_variations.xml'...\033[0m").format(settings.XML_FEED_FILENAME, language))
-        selected_variations = filter(lambda product: product.type in settings.XML_TYPES_IN_VARIATIONS, products)
-        write_xml(selected_variations, language, 'variations')
+        for config_filename in config.keys():
+            print(("\033[95m[Feed XML] Generating '{0}_{1}_{2}.xml'...\033[0m").format(settings.XML_FEED_FILENAME, language, config_filename))
+            selected_products = filter(lambda product: product.type in config[config_filename].keys(), products)
+            write_xml(selected_products, language, config_filename)
 
         products.clear()
         variations.clear()

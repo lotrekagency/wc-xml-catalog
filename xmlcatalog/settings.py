@@ -9,10 +9,6 @@ LANGUAGES = os.environ.get('LANGUAGES', 'it').split(',')
 WOO_CONSUMER_KEY = os.environ.get('WOO_CONSUMER_KEY')
 WOO_CONSUMER_SECRET = os.environ.get('WOO_CONSUMER_SECRET')
 
-#Types of products displayed in products and variations file
-XML_TYPES_IN_PRODUCTS = os.environ.get('XML_TYPES_IN_PRODUCTS', 'variable').split(',')
-XML_TYPES_IN_VARIATIONS = os.environ.get('XML_TYPES_IN_VARIATIONS', 'variation').split(',')
-
 #XML feed fields and settings
 XML_FEED_FILENAME = os.environ.get('XML_FEED_FILENAME', 'feedXML')
 XML_SITE_NAME = os.environ.get('XML_SITE_NAME')
