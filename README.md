@@ -55,59 +55,63 @@ The product types values are: simple, grouped, virtual, downloadable, variable, 
 
 ### Feed configuration
 The output feed can be customized by modifying the `config.json` file.
-This file contains tags and values for the output of every product type indicated in the environment setup.
+The configuration contains the attribute mapping for every file indicated.
+The attribute mapping is related to product types, so one file can contain more product types with the specified attribute mapping.
 
 In the following example two types of products are configured: `variable` and `variation`.
 
 
     {
-      "variable" : {
-        "g:brand" : {
-          "default" : "XML_SITE_NAME"
-        },
-        "g:id" : {
-          "attribute" : "id"
-        },
-        "g:title" : {
-          "attribute" : "name"
-        },
-        "g:condition": {
-          "static" : "New"
-        },
-        "g:image_link" : {
-          "attribute" : "images[0].src"
-        },
-        "g:availability" : {
-          "attribute" : "in_stock",
-          "replacer" : {
-            "True" : "in stock",
-            "False" : "out of stock"
+      "first_file" : {
+          "variable" : {
+            "g:brand" : {
+              "default" : "XML_SITE_NAME"
+            },
+            "g:id" : {
+              "attribute" : "id"
+            },
+            "g:title" : {
+              "attribute" : "name"
+            },
+            "g:condition": {
+              "static" : "New"
+            },
+            "g:image_link" : {
+              "attribute" : "images[0].src"
+            },
+            "g:availability" : {
+              "attribute" : "in_stock",
+              "replacer" : {
+                "True" : "in stock",
+                "False" : "out of stock"
+              }
+            }
+          },
+          "variation" : {
+            "g:title" : {
+              "parent" : "meta_data(key=title).value",
+              "attribute" : "attributes[0].option"
+            },
+            "g:shipping" : {
+              "default" : "default_shippings",
+              "unique" : true
+            },
+            "g:sale_price" : {
+              "attribute" : "sale_price",
+              "suffix" : " EUR"
+            },
+            "g:category" : {
+              "attribute" : "categories.name",
+              "separator" : " - "
+            },
+            "g:description" : {
+              "attribute" : "meta_data(key=description).value"
+            }
           }
-        }
-      },
-      "variation" : {
-        "g:title" : {
-          "parent" : "meta_data(key=title).value",
-          "attribute" : "attributes[0].option"
-        },
-        "g:shipping" : {
-          "default" : "default_shippings",
-          "unique" : true
-        },
-        "g:sale_price" : {
-          "attribute" : "sale_price",
-          "suffix" : " EUR"
-        },
-        "g:category" : {
-          "attribute" : "categories.name",
-          "separator" : " - "
-        },
-        "g:description" : {
-          "attribute" : "meta_data(key=description).value"
-        }
-      }
+       }
     }
 
+The service will generate the file `first_file.xml` with the `variable` and `variation` product types retrieved from the WC REST API.
 Each product type configuration contains objects for each tag in the output feed.
 
 Example:
