@@ -8,7 +8,7 @@ import json
 
 def get_products(api, language, products=[], page=1):
     current_products = [FeedProduct(product) for product in api.get_products(lang=language, page=page)]
-    if page == 2:
+    if not current_products:
         return products
     return get_products(api, language, (products + current_products), (page + 1))
 
