@@ -75,12 +75,13 @@ class FeedProduct(Product):
                 value = config.get('prefix', '') + str(value) + config.get('suffix', '')
             if 'fatal' in config:
                 fatal_value = config.get('fatal')
-                if isinstance(fatal_value, list):
-                    fatal_value = list(map(str, fatal_value))
-                    if not str(value) in fatal_value:
+                if not isinstance(fatal_value, bool):
+                    if isinstance(fatal_value, list):
+                        fatal_value = list(map(str, fatal_value))
+                        if not str(value) in fatal_value:
+                            is_valid = False
+                    elif not str(value) == str(fatal_value):
                         is_valid = False
-                elif not str(value) == str(fatal_value):
-                    is_valid = False
         else:
             if config.get('fatal'):
                 is_valid = False
@@ -119,10 +120,28 @@ class FeedProduct(Product):
             return None
 
     @property
+    def price(self):
+        if not self._product.price:
+            return
+        return '{0:.2f}'.format(float(self._product.price))
+    
+    @property
+    def sale_price(self):
+        if not self._product.sale_price:
+            return
+        return '{0:.2f}'.format(float(self._product.sale_price))
+
+    @property
     def taxed_price(self):
-        return self.get_taxed_price(self._product.price, utils.current_tax_rate)
+        taxed_price = self.get_taxed_price(self._product.price, utils.current_tax_rate)
+        if not taxed_price:
+            return
+        return '{0:.2f}'.format(float(taxed_price))
 
     @property
     def taxed_sale_price(self):
-        return self.get_taxed_price(self._product.sale_price, utils.current_tax_rate)
+        taxed_sale_price = self.get_taxed_price(self._product.sale_price, utils.current_tax_rate)
+        if not taxed_sale_price:
+            return
+        return '{0:.2f}'.format(float(taxed_sale_price))
 

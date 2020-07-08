@@ -20,6 +20,8 @@ def get_shipping_method(method, location):
     method_price = '0'
     if method.settings.get('cost'):
         method_price = getattr(method.settings.get('cost'), 'value')
+        if isinstance(method_price, str):
+            method_price = method_price.replace(',', '.')
     shipping_method = {
         'g:country' : {
             'static' : location.code
@@ -28,7 +30,7 @@ def get_shipping_method(method, location):
             'static' : method.method_title
         },
         'g:price' : {
-            'static' : method_price,
+            'static' : '{0:.2f}'.format(float(method_price)),
             'suffix' : ' EUR'
         }
     }
