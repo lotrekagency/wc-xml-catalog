@@ -94,12 +94,18 @@ class FeedProduct(Product):
         elif 'default' in config:
             value = utils.get_default_value(config['default'])
         elif 'attribute' in config:
-            value = self.get_value(config['attribute'])
+            try:
+                value = self.get_value(config['attribute'])
+            except AttributeError:
+                pass
         elif 'parent' in config:
-            if self._parent:
-                value = self._parent.get_value(config['parent'])
-            else:
-                value = self.get_value(config['parent'])
+            try:
+                if self._parent:
+                    value = self._parent.get_value(config['parent'])
+                else:
+                    value = self.get_value(config['parent'])
+            except AttributeError:
+                pass
         return value
 
     def read_config(self, config):
