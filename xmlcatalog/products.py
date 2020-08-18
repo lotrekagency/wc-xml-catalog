@@ -1,5 +1,9 @@
 from pywoo.models.products import Product
 import utils
+import copy
+
+MAIN_KEYS = set(['static', 'attribute', 'parent', 'default'])
+EXTRA_KEYS = set(['unique', 'suffix', 'prefix', 'separator', 'replacer', 'fatal', 'visible'])
 
 class FeedProduct(Product):
 
@@ -39,12 +43,15 @@ class FeedProduct(Product):
 
         try:
             path = self
+
             for field in fieldnames[:-1]:
                 path, conditions = select(path, field)
                 if not conditions:
                     path = getattr(path, field)
+
             field = fieldnames[-1]
             value = None
+
             if isinstance(path, dict):
                 value = path.get(field)
             elif isinstance(path, list):
@@ -53,77 +60,112 @@ class FeedProduct(Product):
                 value, conditions = select(path, field)
                 if not conditions:
                     value = getattr(value, field)
+
             return value
         except Exception as exception:
             raise type(exception)(("{0} at product ID {1} with attribute '{2}'").format(exception, self.id, fieldname))
 
 
     def process_value(self, value, config):
-        is_valid = True
-        if value:
-            if config.get('separator'):
-                separator = config.get('separator')
-                if isinstance(value, list):
-                    processed_value = config.get('prefix', '') + str(value[0]) + config.get('suffix', '')
-                    for element in value[1:]:
-                        processed_value = processed_value + separator + config.get('prefix', '') + str(element) + config.get('suffix', '')
-                    value = processed_value
-            elif 'replacer' in config:
-                replacer_switcher = config['replacer']
-                value = replacer_switcher.get(str(value))
-            if not type(value) in [dict, list]:
-                value = config.get('prefix', '') + str(value) + config.get('suffix', '')
-            if 'fatal' in config:
-                fatal_value = config.get('fatal')
-                if not isinstance(fatal_value, bool):
-                    if isinstance(fatal_value, list):
-                        fatal_value = list(map(str, fatal_value))
-                        if not str(value) in fatal_value:
-                            is_valid = False
-                    elif not str(value) == str(fatal_value):
-                        is_valid = False
-        else:
-            if config.get('fatal'):
-                is_valid = False
-        return value, is_valid, config.get('unique'), config.get('visible', True)
+        value = [str(value_element) if not isinstance(value_element, dict) else value_element for value_element in value if value_element]
 
-    def read_config_value(self, config):
-        value = None
-        if 'static' in config:
-            value = config['static']
-        elif 'default' in config:
-            value = utils.get_default_value(config['default'])
-        elif 'attribute' in config:
-            try:
-                value = self.get_value(config['attribute'])
-            except AttributeError:
-                pass
-        elif 'parent' in config:
-            try:
-                if self._parent:
-                    value = self._parent.get_value(config['parent'])
-                else:
-                    value = self.get_value(config['parent'])
-            except AttributeError:
-                pass
+        if 'replacer' in config:
+            replacer_dict = config['replacer']
+            value = [replacer_dict[value_element] if value_element in replacer_dict else replacer_dict.get('replacer_fail', value_element) for value_element in value]
+
+        try:
+            value = config.get('prefix', '') + (config.get('separator', ', ')).join(value) + config.get('suffix', '')
+        except TypeError:
+            pass
+
+        if not config.get('visible', True):
+            value = {}
+
         return value
 
+    def read_config_value(self, key, value):
+        value_list = [value] if not isinstance(value, list) else value
+        returned_value = []
+        retrieved_value = None
+
+        for value_item in value_list:
+            if key == 'static':
+                retrieved_value = value_item
+            elif key == 'default':
+                retrieved_value = utils.get_default_value(value_item)
+            elif key == 'attribute':
+                try:
+                    retrieved_value = self.get_value(value_item)
+                except AttributeError:
+                    pass
+            elif key == 'parent':
+                try:
+                    if self._parent:
+                        retrieved_value = self._parent.get_value(value_item)
+                    else:
+                        retrieved_value = self.get_value(value_item)
+                except AttributeError:
+                    pass
+            if retrieved_value:
+                returned_value.append(retrieved_value) if not isinstance(retrieved_value, list) else returned_value.extend(retrieved_value)
+
+        return returned_value
+
+
     def read_config(self, config):
-        post_config = [dict([k]) for k in config.items()]
-        value = None
-        if post_config:
-            value = self.read_config_value(post_config[0])
-            for remaining_config in post_config[1:]:
-                remaining_value = self.read_config_value(remaining_config)
-                if remaining_value:
-                    value = value + ', ' + remaining_value
-        return self.process_value(value, config)
+        value = []
+
+        for key, key_config in list(config.items()):
+            if not isinstance(key_config, dict):
+                value_read = self.read_config_value(key, key_config)
+                if value_read:
+                    value.extend(value_read)
+
+        is_valid = self.check_valid_value(value, config)
+
+        if value:
+            return self.process_value(value, config), is_valid
+
+        if list(set(config.keys()) & MAIN_KEYS):
+            config = {}
+
+        return config, is_valid
 
     def get_taxed_price(self, value, rate):
         try:
             return str(round(float(value) + ((float(value) / 100) * float(rate)), 2))
         except Exception:
             return None
+        
+    def check_valid_value(self, value, config):
+        is_valid = True
+
+        if 'fatal' in config:
+            fatal_value = config.get('fatal', False)
+
+            if not isinstance(fatal_value, bool):
+                fatal_value = [fatal_value] if not isinstance(fatal_value, list) else fatal_value
+                if not list(set(map(str, value)) & set(map(str, fatal_value))):
+                    is_valid = False
+            else:
+                if fatal_value and not value:
+                    is_valid = False
+
+        return is_valid
+
+    def parse_dict(self, config):
+        config = copy.deepcopy(config)
+
+        for key in config.keys():
+            config[key] = [config[key]] if not isinstance(config[key], list) else config[key]
+            for index in range(len(config[key])):
+                config[key][index], is_valid = self.read_config(config[key][index])
+                if isinstance(config[key][index], dict):
+                    config[key][index] = self.parse_dict(config[key][index])
+                if not is_valid:
+                    return {}
+                    
+        return config
 
     @property
     def price(self):

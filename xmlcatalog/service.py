@@ -34,7 +34,7 @@ def get_tax_rates(api, tax_rates=[], page=1):
 
 def create_xml():
     api = Api(settings.WOO_HOST, settings.WOO_CONSUMER_KEY, settings.WOO_CONSUMER_SECRET, console_logs=False)
-    config = json.load(open(settings.XML_CONFIG_PATH))
+    config = json.load(open(settings.XML_CONFIG_FILENAME))
     print("\033[95m[Feed XML] Getting shipping methods...\033[0m")
     utils.default_shippings.clear()
     utils.default_tax_rates.clear()
@@ -58,7 +58,7 @@ def create_xml():
         for config_filename in config.keys():
             print(("\033[95m[Feed XML] Generating '{0}_{1}_{2}.xml'...\033[0m").format(settings.XML_FEED_FILENAME, language, config_filename))
             selected_products = filter(lambda product: product.type in config[config_filename].keys(), products)
-            write_xml(selected_products, language, config_filename)
+            write_xml(selected_products, language, config_filename, config[config_filename])
 
         products.clear()
         variations.clear()

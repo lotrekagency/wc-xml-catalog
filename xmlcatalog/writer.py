@@ -1,55 +1,35 @@
 import xml.etree.ElementTree as ET
 import os
-import json
 import settings
 from settings import XML_FEED_FILENAME, XML_SITE_NAME, XML_SITE_HOST, XML_FEED_DESCRIPTION
 import utils
 from products import FeedProduct
 
-def write_xml(products, language, filename):
+def write_xml(products, language, filename, config):
     rss = ET.Element('rss')
     rss.set('version', '2.0')
     rss.set('xmlns:g', 'http://base.google.com/ns/1.0')
     channel = ET.SubElement(rss, 'channel')
-    config = json.load(open(settings.XML_CONFIG_PATH))[filename]
     for attribute in utils.switcher_channel:
         item = ET.SubElement(channel, attribute)
         item.text = utils.switcher_channel[attribute]
     for product in products:
-        item, is_valid = create_subelement(config[product.type], product)
-        if is_valid:
-            channel.append(item)
+        product_dict = product.parse_dict(config[product.type])
+        fill_item(product_dict, channel)
     root = ET.ElementTree(rss)
     os.makedirs('feeds', exist_ok=True)
     root.write('feeds/{0}_{1}_{2}.xml'.format(XML_FEED_FILENAME, language, filename))
     print(("\033[92m\033[1m[Feed XML] '{0}_{1}_{2}.xml' generated.\033[0m").format(XML_FEED_FILENAME, language, filename))
 
-def create_subelement(config, product):
-    item = ET.Element('item')
-    is_valid = get_switcher_attribute(config, item, product)
-    return item, is_valid
-
-def get_switcher_attribute(config, item, product):
-    is_valid = True
-    for attribute in config:
-        value, is_valid, unique, is_visible = product.read_config(config[attribute])
-        if not is_valid:
-            break
-        if value:
-            if is_visible:
-                write_xml_attribute(value, item, attribute, product, unique)
-    return is_valid
-
-def write_xml_attribute(value, item, attribute, product, is_unique):
-    if isinstance(value, list):
-        if is_unique:
-            for element in value:
-                main_attribute = ET.SubElement(item, attribute)
-                get_switcher_attribute(element, main_attribute, product)
-        else:
-            main_attribute = ET.SubElement(item, attribute)
-            for element in value:
-                get_switcher_attribute(element, main_attribute, product)
+def fill_item(config, parent, key='item'):
+    item = ET.Element(key)
+    if isinstance(config, dict):
+        for tag in config.keys():
+            fill_item(config[tag], item, tag)
+    elif isinstance(config, list):
+        for config_element in config:
+            fill_item(config_element, parent, key)
     else:
-        product_attribute = ET.SubElement(item, attribute)
-        product_attribute.text = value
+        item.text = config
+    if len(item) or item.text:
+        parent.append(item)

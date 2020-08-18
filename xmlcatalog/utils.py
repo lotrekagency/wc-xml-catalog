@@ -23,16 +23,9 @@ def get_shipping_method(method, location):
         if isinstance(method_price, str):
             method_price = method_price.replace(',', '.')
     shipping_method = {
-        'g:country' : {
-            'static' : location.code
-        },
-        'g:service' : {
-            'static' : method.method_title
-        },
-        'g:price' : {
-            'static' : '{0:.2f}'.format(float(method_price)),
-            'suffix' : ' EUR'
-        }
+        'g:country' : location.code,
+        'g:service' : method.method_title,
+        'g:price' : '{0:.2f} EUR'.format(float(method_price))
     }
     return shipping_method
 
@@ -40,15 +33,9 @@ def set_tax_rates(rates):
     for rate in rates:
         default_tax_rates.append(
             {
-                'g:country' : {
-                    'static' : rate.country
-                },
-                'g:rate' : {
-                    'static' : rate.rate
-                },
-                'g:tax_ship' : {
-                    'static' : 'yes' if rate.shipping else 'no'
-                }
+                'g:country' : rate.country,
+                'g:rate' : rate.rate,
+                'g:tax_ship' : 'yes' if rate.shipping else 'no'
             }
         )
 
