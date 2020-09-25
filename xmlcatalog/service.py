@@ -48,17 +48,20 @@ def create_xml():
     print("\033[95m[Feed XML] Getting tax rates...\033[0m")
     taxes = get_tax_rates(api)
     for language in settings.LANGUAGES:
+        utils.current_language = language
         utils.current_tax_rate = next((rate.rate for rate in taxes if rate.country.lower() == language.lower()), None)
-        print(("\033[95m[Feed XML] Getting products for language '{0}'...\033[0m").format(language))
+        print(("\033[95m[Feed XML] Getting products for language '%s'...\033[0m") % language)
         products = get_products(api, language)
-        print(("\033[95m[Feed XML] Getting variations for language '{0}'...\033[0m").format(language))
+        print(("\033[95m[Feed XML] Getting variations for language '%s'...\033[0m") % language)
         variations = get_variations(api, language, products)
         products = products + variations
 
         for config_filename in config.keys():
-            print(("\033[95m[Feed XML] Generating '{0}_{1}_{2}.xml'...\033[0m").format(settings.XML_FEED_FILENAME, language, config_filename))
+            config_file_path = config_filename.split('/')
+            config_file_directory = ('/').join(['feeds'] + config_file_path[:-1])
+            print(("\033[95m[Feed XML] Generating '%s/%s_%s_%s.xml'...\033[0m") % (config_file_directory, settings.XML_FEED_FILENAME, language, config_file_path[-1]))
             selected_products = filter(lambda product: product.type in config[config_filename].keys(), products)
-            write_xml(selected_products, language, config_filename, config[config_filename])
+            write_xml(selected_products, language, config_file_path, config[config_filename])
 
         products.clear()
         variations.clear()

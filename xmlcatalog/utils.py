@@ -8,6 +8,7 @@ XML_FEED_DESCRIPTION = settings.XML_FEED_DESCRIPTION
 
 default_shippings = []
 default_tax_rates = []
+current_language = ''
 current_tax_rate = None
 
 switcher_channel = {

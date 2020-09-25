@@ -17,9 +17,11 @@ def write_xml(products, language, filename, config):
         product_dict = product.parse_dict(config[product.type])
         fill_item(product_dict, channel)
     root = ET.ElementTree(rss)
-    os.makedirs('feeds', exist_ok=True)
-    root.write('feeds/{0}_{1}_{2}.xml'.format(XML_FEED_FILENAME, language, filename))
-    print(("\033[92m\033[1m[Feed XML] '{0}_{1}_{2}.xml' generated.\033[0m").format(XML_FEED_FILENAME, language, filename))
+    path_list = ['feeds'] + filename
+    path_list_directory = ('/'.join(path_list[:-1]))
+    os.makedirs(path_list_directory, exist_ok=True)
+    root.write('%s/%s_%s_%s.xml' % (path_list_directory, XML_FEED_FILENAME, language, path_list[-1]))
+    print(("\033[92m\033[1m[Feed XML] '%s/%s_%s_%s.xml' generated.\033[0m") % (path_list_directory, XML_FEED_FILENAME, language, path_list[-1]))
 
 def fill_item(config, parent, key='item'):
     item = ET.Element(key)
