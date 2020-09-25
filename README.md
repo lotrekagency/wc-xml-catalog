@@ -211,6 +211,8 @@ Available variables are:
 * `XML_FEED_DESCRIPTION`, contains the site description
 * `default_shippings`, contains the list of all the shippings retrieved
 * `default_tax_rates`, contains the list of all the tax rates retrieved
+* `current_language`, contains the language code of the processing generation
+* `current_tax_rate`, contains the tax rate of the processing generation
 
 Example:
 
@@ -336,6 +338,26 @@ The output will be the following.
       <g:country>EN</g:country>
       <g:price>9.99 EUR</g:price>
     </g:shipping>
+
+#### Paths
+It's possibile to organize your XML files generation in folders: if you insert the desiderd path for your file in the file name value of your configuration, the service will generate the files with indicated path.
+
+Example:
+
+    "facebook/products" : {
+      "products" : {
+        ...
+      }
+    },
+    "google_products" : {
+      "products" : {
+        ...
+      }
+    }
+The service will generate two files with different paths:
+* `feeds/facebook/feedXML_products`
+* `feeds/feedXML_google_products`
+
 
 
 ## Test it
