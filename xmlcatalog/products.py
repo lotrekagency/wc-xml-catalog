@@ -7,8 +7,9 @@ EXTRA_KEYS = set(['unique', 'suffix', 'prefix', 'separator', 'replacer', 'fatal'
 
 class FeedProduct(Product):
 
-    def __init__(self, product, parent=None):
+    def __init__(self, product, language, parent=None):
         self._product = product
+        self.language = language
         self._parent = parent
 
     def __getattr__(self, attr):
