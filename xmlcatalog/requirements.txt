@@ -3,3 +3,4 @@ pywoo==1.0.3
 redis==3.3.11
 sentry-sdk==0.10.2
 pyOpenSSL==19.1.0
+requests-cache==0.5.2
