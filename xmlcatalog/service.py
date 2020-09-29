@@ -10,14 +10,14 @@ requests_cache.install_cache('pywoo_cache', backend='sqlite')
 
 
 def get_products(api, language, products=[], page=1):
-    current_products = [FeedProduct(product, language) for product in api.get_products(lang=language, page=page)]
-    if not current_products:
+    current_products = [FeedProduct(product, language) for product in api.get_products(lang=language, page=page, status=settings.PRODUCTS_STATUS_CODE)]
+    if page == 2:
         return products
     return get_products(api, language, (products + current_products), (page + 1))
 
 def get_product_variations(api, language, product_id, variations=[], page=1):
-    current_variations = api.get_product_variations(product_id=product_id, lang=language, page=page)
-    if not current_variations:
+    current_variations = api.get_product_variations(product_id=product_id, lang=language, page=page, status=settings.PRODUCTS_STATUS_CODE)
+    if page == 2:
         return variations
     return get_product_variations(api, language, product_id, (variations + current_variations), (page + 1))
 
