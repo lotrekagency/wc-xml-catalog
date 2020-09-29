@@ -48,9 +48,9 @@ The `WOO_HOST`, `WOO_CONSUMER_KEY` and the `WOO_CONSUMER_SECRET` are the three m
 `XML_SITE_HOST` is the URL of your WooCommerce site.<br>
 `XML_FEED_FILENAME` is the name of the generated feed file. It's optional.<br>
 `XML_FEED_DESCRIPTION` contains the description in the feed file. It's optional.<br>
-`XML_CONFIG_FILENAME` contains the filename of the configuration file. Default value is `config.json`.
-`PRODUCTS_STATUS_CODE` contains the status code for list product filtering from REST API.
-`CRONTAB_HOUR` contains the string for the interval of cron events. Default value is `*/7`, which stands for "event every seven hours".
+`XML_CONFIG_FILENAME` contains the filename of the configuration file. Default value is `config.json`.<br>
+`PRODUCTS_STATUS_CODE` contains the status code for list product filtering from REST API. Default value is `publish`.<br>
+`CRONTAB_HOUR` contains the string for the interval of cron events. Default value is `*/7`, which stands for "event every seven hours".<br>
 `SENTRY_URL` contains the URL of your sentry service. If it's not set any exception will be sent to Sentry.
 
 ## Build your feed
