@@ -21,7 +21,8 @@ def get_product_variations(api, language, product_id, variations=[], page=1):
         return variations
     return get_product_variations(api, language, product_id, (variations + current_variations), (page + 1))
 
-def get_variations(api, language, products, variations=[]):
+def get_variations(api, language, products):
+    variations = []
     for product in products:
         product_variations = get_product_variations(api, language, product.id)
         for variation in product_variations:
@@ -71,8 +72,6 @@ def create_xml():
 
                 config_file_path = config_file_name.split('/')
                 config_file_directory = ('/').join(['feeds'] + config_file_path[:-1])
-                print(("\033[95m[Feed XML] Generating '%s/%s_%s_%s.xml'...\033[0m") % (config_file_directory, settings.XML_FEED_FILENAME, ('_').join(languages_in_file), config_file_path[-1]))
+                print(("\033[95m[Feed XML] Generating '%s/%s_%s_%s.xml'...\033[0m") % (config_file_directory, settings.XML_FEED_FILENAME, language_file, config_file_path[-1]))
                 selected_products = filter(lambda product: product.type in config_file_types.keys(), elements)
-                write_xml(selected_products, languages_in_file, config_file_path, config_file_types)
-    
-    elements.clear()
+                write_xml(selected_products, language_file, config_file_path, config_file_types)    

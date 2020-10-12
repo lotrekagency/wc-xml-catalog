@@ -5,7 +5,7 @@ from settings import XML_FEED_FILENAME, XML_SITE_NAME, XML_SITE_HOST, XML_FEED_D
 import utils
 from products import FeedProduct
 
-def write_xml(products, languages, filename, config):
+def write_xml(products, language_file, filename, config):
     rss = ET.Element('rss')
     rss.set('version', '2.0')
     rss.set('xmlns:g', 'http://base.google.com/ns/1.0')
@@ -20,8 +20,8 @@ def write_xml(products, languages, filename, config):
     path_list = ['feeds'] + filename
     path_list_directory = ('/'.join(path_list[:-1]))
     os.makedirs(path_list_directory, exist_ok=True)
-    root.write('%s/%s_%s_%s.xml' % (path_list_directory, XML_FEED_FILENAME, ('_').join(languages), path_list[-1]))
-    print(("\033[92m\033[1m[Feed XML] '%s/%s_%s_%s.xml' generated.\033[0m") % (path_list_directory, XML_FEED_FILENAME, ('_').join(languages), path_list[-1]))
+    root.write('%s/%s_%s_%s.xml' % (path_list_directory, XML_FEED_FILENAME, language_file, path_list[-1]))
+    print(("\033[92m\033[1m[Feed XML] '%s/%s_%s_%s.xml' generated.\033[0m") % (path_list_directory, XML_FEED_FILENAME, language_file, path_list[-1]))
 
 def fill_item(config, parent, key='item'):
     item = ET.Element(key)
