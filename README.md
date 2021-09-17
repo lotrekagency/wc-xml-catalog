@@ -84,12 +84,12 @@ In the following example two types of products are configured: `variable` and `v
             "g:image_link" : {
               "attribute" : "images[0].src"
             },
-            "g:availability" : {
-              "attribute" : "in_stock",
-              "replacer" : {
-                "True" : "in stock",
-                "False" : "out of stock"
-              }
+            "g:availability": {
+                "attribute": "stock_status",
+                "replacer": {
+                    "instock": "in stock",
+                    "onbackorder": "out of stock"
+                }
             }
           },
           "variation" : {
