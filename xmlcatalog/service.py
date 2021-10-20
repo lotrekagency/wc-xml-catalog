@@ -24,9 +24,10 @@ def get_product_variations(api, language, product_id, variations=[], page=1):
 def get_variations(api, language, products):
     variations = []
     for product in products:
-        product_variations = get_product_variations(api, language, product.id)
-        for variation in product_variations:
-            variations.append(FeedProduct(api.get_products(id=variation.id), language, product))
+        if product.type == 'variable':
+            product_variations = get_product_variations(api, language, product.id)
+            for variation in product_variations:
+                variations.append(FeedProduct(api.get_products(id=variation.id), language, product))
     return variations
 
 def get_tax_rates(api, tax_rates=[], page=1):
@@ -68,7 +69,10 @@ def create_xml():
                 elements = []
                 for language in languages_in_file:
                     print(("\033[95m[Feed XML] Getting products in language '%s'...\033[0m") % language)
-                    elements.extend(get_products_and_variations(api, language))
+                    if 'variation' in config_file_types:
+                        elements.extend(get_products_and_variations(api, language))
+                    else:
+                        elements.extend(get_products(api, language))
 
                 config_file_path = config_file_name.split('/')
                 config_file_directory = ('/').join(['feeds'] + config_file_path[:-1])
