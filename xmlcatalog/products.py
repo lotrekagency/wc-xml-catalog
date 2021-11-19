@@ -151,6 +151,17 @@ class FeedProduct(Product):
             else:
                 if fatal_value and not value:
                     is_valid = False
+            
+        if 'exclude' in config:
+            exclude_value = config.get('exclude', False)
+
+            if not isinstance(exclude_value, bool):
+                exclude_value = [exclude_value] if not isinstance(exclude_value, list) else exclude_value
+                if list(set(map(str, value)) & set(map(str, exclude_value))):
+                    is_valid = False
+            else:
+                if exclude_value and value:
+                    is_valid = False
 
         return is_valid
 

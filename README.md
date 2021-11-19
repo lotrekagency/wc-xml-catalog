@@ -256,6 +256,7 @@ There are some extra keys for strings formatting:
 * `separator`, contains the string which will separate the values of every object list
 * `replacer`, contains a dictionary with the values that need to be replaced in the output feed, if there is no match with value and dictionary it's possibile to output the `replacer_fail` value contained in the replacer dict
 * `fatal`, if it's `true` and the retrieved value it's `None` or if the value retrieved is not contained in a specified value list (`"fatal" : [...]`) or is not equal to a single value (`"fatal" : "example"`), the father object will not loaded on the output feed
+* `exclude`, if it's `true` and the retrieved value exists or if the value is contained in the exclusion list (`"exclude" : [...]`) the object will not loaded on the feed
 * `visible`, if it's `false` the attribute will not be loaded on the XML file, default value is `true`
 
 ### Building tags
